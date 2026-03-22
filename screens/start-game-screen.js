@@ -7,12 +7,13 @@ import {
   TextInput,
   View,
 } from "react-native";
-import PrimaryButton from "../components/primary-button";
+import PrimaryButton from "../components/ui/primary-button";
 import { useState } from "react";
+import { colors } from "../constants/colors";
 
 const inputAccessoryViewID = "doneButton";
 
-export default function StartGameScreen() {
+export default function StartGameScreen({ onPickNumber }) {
   const [userInput, setUserInput] = useState("");
 
   const handleUserInput = (input) => {
@@ -31,7 +32,7 @@ export default function StartGameScreen() {
       ]);
       return;
     }
-    console.log("valid number", userInput);
+    onPickNumber(userInput);
   };
 
   return (
@@ -56,7 +57,7 @@ export default function StartGameScreen() {
       </View>
 
       <InputAccessoryView nativeID={inputAccessoryViewID}>
-        <Button title="Done" onPress={Keyboard.dismiss} color={"#ffffff"} />
+        <Button title="Done" onPress={Keyboard.dismiss} color={colors.white} />
       </InputAccessoryView>
     </View>
   );
@@ -67,7 +68,7 @@ const styles = StyleSheet.create({
     padding: 16,
     marginTop: 100,
     marginHorizontal: 24,
-    backgroundColor: "#3b021f",
+    backgroundColor: colors.primary800,
     borderRadius: 8,
     // shadow for android only
     elevation: 4,
@@ -82,9 +83,9 @@ const styles = StyleSheet.create({
     width: 50,
     height: 50,
     fontSize: 32,
-    borderBottomColor: "#ddb52f",
+    borderBottomColor: colors.accent500,
     borderBottomWidth: 2,
-    color: "#ddb52f",
+    color: colors.accent500,
     marginVertical: 8,
     fontWeight: "bold",
     textAlign: "center",
