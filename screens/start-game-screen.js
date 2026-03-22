@@ -32,7 +32,7 @@ export default function StartGameScreen({ onPickNumber }) {
       ]);
       return;
     }
-    onPickNumber(userInput);
+    onPickNumber(inputNumber);
   };
 
   return (

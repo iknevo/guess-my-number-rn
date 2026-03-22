@@ -1,16 +1,21 @@
 import { Alert, StyleSheet, Text, View } from "react-native";
 import Title from "../components/ui/title";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { generateRandomNumber } from "../utils/generate-random-number";
 import NumberContainer from "../components/game/number-container";
 import PrimaryButton from "../components/ui/primary-button";
 
-let minBoundary = 1;
-let maxBoundary = 100;
-
-export default function GameScreen({ userNumber }) {
-  const initialGuess = generateRandomNumber(minBoundary, maxBoundary, userNumber);
+export default function GameScreen({ userNumber, onGameOver }) {
+  const minBoundary = useRef(1);
+  const maxBoundary = useRef(100);
+  const initialGuess = generateRandomNumber(minBoundary.current, maxBoundary.current, userNumber);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
+
+  useEffect(() => {
+    if (currentGuess === userNumber) {
+      onGameOver();
+    }
+  }, [currentGuess, userNumber, onGameOver]);
 
   const handleNextGuess = (direction) => {
     if (
@@ -23,11 +28,15 @@ export default function GameScreen({ userNumber }) {
     }
 
     if (direction === "lower") {
-      maxBoundary = currentGuess;
+      maxBoundary.current = currentGuess;
     } else if (direction === "higher") {
-      minBoundary = currentGuess + 1;
+      minBoundary.current = currentGuess + 1;
     }
-    const newRandomNumber = generateRandomNumber(minBoundary, maxBoundary, currentGuess);
+    const newRandomNumber = generateRandomNumber(
+      minBoundary.current,
+      maxBoundary.current,
+      currentGuess
+    );
     setCurrentGuess(newRandomNumber);
   };
 
@@ -36,13 +45,12 @@ export default function GameScreen({ userNumber }) {
       <Title>Opponent's Guess</Title>
       <NumberContainer>{currentGuess}</NumberContainer>
       <View>
-        <Text>{currentGuess}</Text>
         <View style={styles.buttonsContainer}>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={() => handleNextGuess("lower")}>minus</PrimaryButton>
+            <PrimaryButton onPress={() => handleNextGuess("lower")}>LOWER</PrimaryButton>
           </View>
           <View style={styles.buttonContainer}>
-            <PrimaryButton onPress={() => handleNextGuess("higher")}>plus</PrimaryButton>
+            <PrimaryButton onPress={() => handleNextGuess("higher")}>GREATER</PrimaryButton>
           </View>
         </View>
       </View>
