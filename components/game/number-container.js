@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from "react-native";
 import { colors } from "../../constants/colors";
 
-export default function NumberContainer({ children }) {
+export default function NumberContainer({ children, style = {} }) {
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, style]}>
       <Text style={styles.text}>{children}</Text>
     </View>
   );
@@ -22,6 +22,6 @@ const styles = StyleSheet.create({
   text: {
     color: colors.accent500,
     fontSize: 36,
-    fontWeight: "bold",
+    fontFamily: "open-sans-bold",
   },
 });

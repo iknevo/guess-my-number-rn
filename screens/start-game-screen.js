@@ -10,6 +10,9 @@ import {
 import PrimaryButton from "../components/ui/primary-button";
 import { useState } from "react";
 import { colors } from "../constants/colors";
+import Title from "../components/ui/title";
+import Card from "../components/ui/card";
+import InstructionsText from "../components/ui/instructions-text";
 
 const inputAccessoryViewID = "doneButton";
 
@@ -36,48 +39,42 @@ export default function StartGameScreen({ onPickNumber }) {
   };
 
   return (
-    <View style={styles.inputContainer}>
-      <TextInput
-        style={styles.textInput}
-        value={userInput}
-        onChangeText={handleUserInput}
-        maxLength={2}
-        keyboardType="numeric"
-        autoCapitalize="none"
-        autoCorrect={false}
-        inputAccessoryViewID={inputAccessoryViewID}
-      />
-      <View style={styles.buttonsContainer}>
-        <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={handleReset}>Reset</PrimaryButton>
+    <View style={styles.rootContainer}>
+      <Title style={{ borderRadius: 8 }}>Guess My Number</Title>
+      <Card>
+        <InstructionsText>Enter a Number</InstructionsText>
+        <TextInput
+          style={styles.textInput}
+          value={userInput}
+          onChangeText={handleUserInput}
+          maxLength={2}
+          keyboardType="numeric"
+          autoCapitalize="none"
+          autoCorrect={false}
+          inputAccessoryViewID={inputAccessoryViewID}
+        />
+        <View style={styles.buttonsContainer}>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={handleReset}>Reset</PrimaryButton>
+          </View>
+          <View style={styles.buttonContainer}>
+            <PrimaryButton onPress={handleConfirm}>Confirm</PrimaryButton>
+          </View>
         </View>
-        <View style={styles.buttonContainer}>
-          <PrimaryButton onPress={handleConfirm}>Confirm</PrimaryButton>
-        </View>
-      </View>
 
-      <InputAccessoryView nativeID={inputAccessoryViewID}>
-        <Button title="Done" onPress={Keyboard.dismiss} color={colors.white} />
-      </InputAccessoryView>
+        <InputAccessoryView nativeID={inputAccessoryViewID}>
+          <Button title="Done" onPress={Keyboard.dismiss} color={colors.white} />
+        </InputAccessoryView>
+      </Card>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  inputContainer: {
-    padding: 16,
+  rootContainer: {
+    flex: 1,
     marginTop: 100,
-    marginHorizontal: 24,
-    backgroundColor: colors.primary800,
-    borderRadius: 8,
-    // shadow for android only
-    elevation: 4,
-    // for ios
-    shadowColor: "#000000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 6,
-    shadowOpacity: 0.25,
-    alignItems: "center",
+    paddingHorizontal: 24,
   },
   textInput: {
     width: 50,

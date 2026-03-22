@@ -4,26 +4,42 @@ import StartGameScreen from "./screens/start-game-screen";
 import GameScreen from "./screens/game-screen";
 import GameOverScreen from "./screens/game-over-screen";
 import { LinearGradient } from "expo-linear-gradient";
-
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
 import { colors } from "./constants/colors";
+import { useFonts } from "expo-font";
+import * as SplashScreen from "expo-splash-screen";
+
+SplashScreen.preventAutoHideAsync();
 
 export default function App() {
   const [userNumber, setUserNumber] = useState(null);
   const [gameOver, setGameOver] = useState(false);
+  const [numRounds, setNumRounds] = useState(0);
+  const [loaded, error] = useFonts({
+    "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
+    "open-sans-bold": require("./assets/fonts/OpenSans-Bold.ttf"),
+  });
+
+  useEffect(() => {
+    if (loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error]);
 
   const handlePickNumber = (pickedNumber) => {
     setUserNumber(pickedNumber);
   };
 
-  const handleGameOver = () => {
+  const handleGameOver = (numRounds) => {
     setGameOver(true);
+    setNumRounds(numRounds);
   };
 
   const handleRestartGame = () => {
     setUserNumber(null);
     setGameOver(false);
+    setNumRounds(0);
   };
 
   let screen = <StartGameScreen onPickNumber={handlePickNumber} />;
@@ -33,7 +49,9 @@ export default function App() {
   }
 
   if (gameOver && userNumber) {
-    screen = <GameOverScreen userNumber={userNumber} onRestart={handleRestartGame} />;
+    screen = (
+      <GameOverScreen userNumber={userNumber} onRestart={handleRestartGame} numRounds={numRounds} />
+    );
   }
 
   return (
